@@ -70,8 +70,8 @@ func TestLoad(t *testing.T) {
 		  "Region": "us-east-1",
 		  "Running": false
 		}
-	  ]
-	  `
+	]
+	`
 
 	got, err := LoadInstancesFromYAML()
 	if err != nil {
@@ -132,7 +132,7 @@ func TestInstancesByRegion(t *testing.T) {
 			"Running": false
 		  }
 		]
-	  }
+	}
 	`
 
 	var want map[string][]Instance
@@ -162,7 +162,7 @@ func TestInstancesByRegion(t *testing.T) {
 		  "Region": "us-east-1",
 		  "Running": false
 		}
-	  ]
+	]
 	`
 
 	// Unmarshal the JSON string into a struct
@@ -227,8 +227,9 @@ func TestContainerSlice(t *testing.T) {
 		  ],
 		  "Region": "us-east-1"
 		}
-	  ]
-	  `
+	]
+	`
+	
 	instances, err := LoadInstancesFromYAML()
 	if err != nil {
 		panic(err)
