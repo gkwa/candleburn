@@ -18,12 +18,12 @@ func Must(logger *Logger, err error) *Logger {
 	return logger
 }
 
-func NewLogger(logFile string) (*Logger, error) {
+func NewLogger(logFile string) *Logger {
 	config := zap.NewProductionConfig()
-	
+
 	defaultLogLevel := zapcore.DebugLevel
-	
-	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+
+	// config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 	config.EncoderConfig.EncodeTime = nil
 
 	consoleEncoder := zapcore.NewConsoleEncoder(config.EncoderConfig)
@@ -31,11 +31,9 @@ func NewLogger(logFile string) (*Logger, error) {
 	core := zapcore.NewTee(
 		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), defaultLogLevel),
 	)
-	logger, err := config.Build(zap.AddCaller())
-	if err != nil {
-		return nil, err
-	}
-	return &Logger{zap: logger}, err
+	logger := zap.New(core)
+
+	return &Logger{zap: logger}
 }
 
 func (l Logger) Debug(msg string, fields ...zap.Field) {
