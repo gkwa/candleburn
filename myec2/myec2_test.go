@@ -175,7 +175,7 @@ func TestInstancesByRegion(t *testing.T) {
 		return
 	}
 
-	got := InstancesByRegion(instanceList)
+	got := instancesByRegion(instanceList)
 
 	// Compare the maps
 	areEqual := true
@@ -235,7 +235,7 @@ func TestContainerSlice(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	instancesByRegion := InstancesByRegion(instances)
+	instancesByRegion := instancesByRegion(instances)
 	got := generateInstanceSlice(instancesByRegion)
 
 	var containerSlice []RegionInstances

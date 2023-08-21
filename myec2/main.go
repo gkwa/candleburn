@@ -49,7 +49,7 @@ func LoadInstancesFromYAML() ([]Instance, error) {
 	return hosts, nil
 }
 
-func InstancesByRegion(instances []Instance) map[string][]Instance {
+func instancesByRegion(instances []Instance) map[string][]Instance {
 	instancesByRegion := make(map[string][]Instance)
 	for _, i := range instances {
 		instancesByRegion[i.Region] = append(instancesByRegion[i.Region], i)
@@ -67,7 +67,7 @@ func GetInstancesState() ([]Instance, error) {
 	var instanceQueryResults []Instance
 	instChannel := make(chan Instance)
 
-	instancesByRegion := InstancesByRegion(instances)
+	instancesByRegion := instancesByRegion(instances)
 	instSlice := generateInstanceSlice(instancesByRegion)
 
 	for _, inst := range instSlice {
