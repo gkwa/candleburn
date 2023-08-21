@@ -9,7 +9,11 @@ import (
 
 var Logger *zap.Logger
 
-func init() {
+func Init() {
+	Logger, _ = GetLogger()
+}
+
+func GetLogger() (*zap.Logger, error) {
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder
 	config.EncodeTime = nil // Removing timestamp from logs
@@ -19,5 +23,11 @@ func init() {
 		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), defaultLogLevel),
 	)
 
-	Logger = zap.New(core, zap.AddCaller())
+	logger := zap.New(core, zap.AddCaller())
+
+	return logger, nil
+}
+
+func Sync() {
+	Logger.Sync()
 }

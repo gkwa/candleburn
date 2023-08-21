@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/taylormonacelli/candleburn/logging"
 	"github.com/taylormonacelli/candleburn/myec2"
 )
 
@@ -19,6 +20,11 @@ var (
 	showVersion bool
 	outfile     string
 )
+
+func init() {
+	logging.Init()
+	defer logging.Sync()
+}
 
 func main() {
 	flag.BoolVar(&showVersion, "version", false, "Show the application version")
