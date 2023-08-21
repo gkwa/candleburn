@@ -28,19 +28,6 @@ func GetLogger() (*zap.Logger, error) {
 	return logger, nil
 }
 
-func createLogger() (*zap.Logger, error) {
-	config := zap.Config{
-		Level:             zap.NewAtomicLevelAt(zapcore.DebugLevel),
-		Encoding:          "console",
-		EncoderConfig:     zap.NewDevelopmentEncoderConfig(),
-		OutputPaths:       []string{"brownfish.log"}, // Update the file path here
-		ErrorOutputPaths:  []string{"stderr"},
-		DisableStacktrace: true,
-	}
-
-	return config.Build()
-}
-
 func Sync() {
 	Logger.Sync()
 }
