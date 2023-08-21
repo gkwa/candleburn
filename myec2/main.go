@@ -38,7 +38,7 @@ func LoadInstancesFromYAML() ([]Instance, error) {
 	}
 	defer file.Close()
 
-	var data map[string][]Instance
+	data := make(map[string][]Instance)
 	decoder := yaml.NewDecoder(file)
 	if err := decoder.Decode(&data); err != nil {
 		logging.Logger.Fatal(err.Error())
