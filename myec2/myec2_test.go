@@ -82,13 +82,11 @@ func TestLoad(t *testing.T) {
 	var instanceList []Instance
 	err = json.Unmarshal([]byte(expected), &instanceList)
 	if err != nil {
-		fmt.Println("Error:", err)
-		return
+		t.Error(err)
 	}
 
 	want := instanceList
 
-	// Compare slices
 	equal := CompareInstanceSlices(want, got)
 
 	if !equal {
