@@ -34,7 +34,7 @@ func main() {
 
 	if showVersion || len(os.Args) > 1 && os.Args[1] == "version" {
 		fmt.Printf("%s %s, commit %s, built at %s\n", processName, version, commit, date)
-		return
+		os.Exit(0)
 	}
 
 	results, err := myec2.GetInstancesState()

@@ -60,27 +60,28 @@ func InstancesByRegion(instances []Instance) map[string][]Instance {
 func GetInstancesState() ([]Instance, error) {
 	instances, err := LoadInstancesFromYAML()
 	if err != nil {
-		panic(err)
+		return []Instance{}, fmt.Errorf("failed to load instances from yaml: %w", err)
 	}
-	instancesByRegion := InstancesByRegion(instances)
-	containerList := generateContainerSlice(instancesByRegion)
 
 	var wg sync.WaitGroup
-	instanceChannel := make(chan Instance)
 	var instanceQueryResults []Instance
+	instChannel := make(chan Instance)
 
-	for _, container := range containerList {
+	instancesByRegion := InstancesByRegion(instances)
+	instSlice := generateInstanceSlice(instancesByRegion)
+
+	for _, inst := range instSlice {
 		wg.Add(1)
-		go CheckRegionInstanceState(container, instanceChannel, &wg)
+		go CheckRegionInstanceState(inst, instChannel, &wg)
 	}
 
 	go func() {
 		wg.Wait()
-		close(instanceChannel)
+		close(instChannel)
 	}()
 
-	for v := range instanceChannel {
-		instanceQueryResults = append(instanceQueryResults, v)
+	for inst := range instChannel {
+		instanceQueryResults = append(instanceQueryResults, inst)
 	}
 
 	return instanceQueryResults, nil
@@ -126,7 +127,7 @@ func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan I
 	}
 }
 
-func generateContainerSlice(instancesByRegion map[string][]Instance) []RegionInstances {
+func generateInstanceSlice(instancesByRegion map[string][]Instance) []RegionInstances {
 	var containers []RegionInstances
 
 	for region := range instancesByRegion {

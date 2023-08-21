@@ -236,7 +236,7 @@ func TestContainerSlice(t *testing.T) {
 		panic(err)
 	}
 	instancesByRegion := InstancesByRegion(instances)
-	got := generateContainerSlice(instancesByRegion)
+	got := generateInstanceSlice(instancesByRegion)
 
 	var containerSlice []RegionInstances
 	err = json.Unmarshal([]byte(expected), &containerSlice)
