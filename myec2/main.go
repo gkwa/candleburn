@@ -105,7 +105,6 @@ func GetInstancesState() {
 		panic(err)
 		// return fmt.Errorf("failed to write request response to log file: %w", err)
 	}
-
 }
 
 func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan Instance, wg *sync.WaitGroup) {
