@@ -1,6 +1,8 @@
 package logging
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+)
 
 type Logger struct {
 	zap *zap.Logger
@@ -37,8 +39,9 @@ func (l Logger) Error(msg string, fields ...zap.Field) {
 }
 
 func (l Logger) Fatal(msg string, fields ...zap.Field) {
-	l.writer().Fatal(msg, fields...)
+	l.writer().Error(msg, fields...)
 }
+
 
 var noOpLogger = zap.NewNop()
 
