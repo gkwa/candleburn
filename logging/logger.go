@@ -1,7 +1,10 @@
 package logging
 
 import (
+	"os"
+
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type Logger struct {
@@ -16,9 +19,18 @@ func Must(logger *Logger, err error) *Logger {
 }
 
 func NewLogger(logFile string) (*Logger, error) {
-	zap.NewProductionConfig()
 	config := zap.NewProductionConfig()
-	config.OutputPaths = []string{"stdout", "./logs/" + logFile}
+	
+	defaultLogLevel := zapcore.DebugLevel
+	
+	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncoderConfig.EncodeTime = nil
+
+	consoleEncoder := zapcore.NewConsoleEncoder(config.EncoderConfig)
+
+	core := zapcore.NewTee(
+		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), defaultLogLevel),
+	)
 	logger, err := config.Build(zap.AddCaller())
 	if err != nil {
 		return nil, err
@@ -41,7 +53,6 @@ func (l Logger) Error(msg string, fields ...zap.Field) {
 func (l Logger) Fatal(msg string, fields ...zap.Field) {
 	l.writer().Error(msg, fields...)
 }
-
 
 var noOpLogger = zap.NewNop()
 
