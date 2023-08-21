@@ -30,6 +30,19 @@ type Instance struct {
 	Type       string
 }
 
+type Bar struct {
+	Logger logging.Logger
+}
+
+func (b *Bar) Something() {
+	b.Logger.Debug("starting something")
+}
+
+func DoSomething(logger logging.Logger) {
+	b := Bar{Logger: logger}
+	b.Something()
+}
+
 func LoadInstancesFromYAML() ([]Instance, error) {
 	file, err := os.Open("hosts.yaml")
 	if err != nil {
