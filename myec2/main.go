@@ -49,11 +49,15 @@ type Instance struct {
 	Type       string
 }
 
-func LoadInstancesFromYAML() ([]Instance, error) {
-	file, err := os.Open("hosts.yaml")
-
+func LoadInstancesFromYAML(filePath string) ([]Instance, error) {
+	err := checkFileExists(filePath)
 	if err != nil {
-		logger.Error("failed to open hosts.yaml")
+		return []Instance{}, err
+	}
+
+	file, err := os.Open(filePath)
+	if err != nil {
+		logger.Error("failed to open " + filePath)
 		return []Instance{}, err
 	}
 	defer file.Close()
@@ -78,7 +82,9 @@ func instancesByRegion(instances []Instance) map[string][]Instance {
 }
 
 func GetInstancesState() ([]Instance, error) {
-	instances, err := LoadInstancesFromYAML()
+	filePath := "hosts.yaml"
+
+	instances, err := LoadInstancesFromYAML(filePath)
 	if err != nil {
 		return []Instance{}, fmt.Errorf("failed to load instances from yaml: %w", err)
 	}
@@ -194,5 +200,16 @@ func ExportInstancesQuery(query []Instance, outfile string) error {
 		return fmt.Errorf("failed to write request response to log file: %w", err)
 	}
 
+	return nil
+}
+
+func checkFileExists(filePath string) error {
+	_, err := os.Stat(filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fmt.Errorf("file does not exist")
+		}
+		return err
+	}
 	return nil
 }

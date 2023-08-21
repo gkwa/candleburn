@@ -7,6 +7,12 @@ import (
 	"testing"
 )
 
+var filePath string
+
+func init() {
+	filePath = "hosts.yaml"
+}
+
 func compareInstances(instances1, instances2 []Instance) bool {
 	if len(instances1) != len(instances2) {
 		return false
@@ -74,7 +80,7 @@ func TestLoadManyTimes(t *testing.T) {
 	`
 
 	for i := 0; i < 1000; i++ {
-		got, err := LoadInstancesFromYAML()
+		got, err := LoadInstancesFromYAML(filePath)
 		if err != nil {
 			panic(err)
 		}
@@ -120,7 +126,7 @@ func TestLoad(t *testing.T) {
 	]
 	`
 
-	got, err := LoadInstancesFromYAML()
+	got, err := LoadInstancesFromYAML(filePath)
 	if err != nil {
 		panic(err)
 	}
@@ -142,7 +148,7 @@ func TestLoad(t *testing.T) {
 }
 
 func TestMyFunction(t *testing.T) {
-	hosts, err := LoadInstancesFromYAML()
+	hosts, err := LoadInstancesFromYAML(filePath)
 	if err != nil {
 		panic(err)
 	}
@@ -277,7 +283,7 @@ func TestContainerSlice(t *testing.T) {
 	]
 	`
 
-	instances, err := LoadInstancesFromYAML()
+	instances, err := LoadInstancesFromYAML(filePath)
 	if err != nil {
 		panic(err)
 	}
