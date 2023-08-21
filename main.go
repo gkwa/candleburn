@@ -16,19 +16,30 @@ var (
 	processName = os.Args[0]
 )
 
+var (
+	showVersion bool
+	outfile     string
+)
+
 func init() {
 	logging.Init()
 	defer logging.Sync()
 }
 
 func main() {
-	showVersion := flag.Bool("version", false, "Show the application version")
+	flag.BoolVar(&showVersion, "version", false, "Show the application version")
+	flag.StringVar(&outfile, "outfile", fmt.Sprintf("%s.json", processName), "Save query to this file")
+
 	flag.Parse()
 
-	if *showVersion {
+	if showVersion || len(os.Args) > 1 && os.Args[1] == "version" {
 		fmt.Printf("%s %s, commit %s, built at %s\n", processName, version, commit, date)
-		os.Exit(0)
+		return
 	}
 
-	myec2.GetInstancesState()
+	results, err := myec2.GetInstancesState()
+	if err != nil {
+		panic(err)
+	}
+	myec2.ExportInstancesQuery(results)
 }

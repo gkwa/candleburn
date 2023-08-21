@@ -3,6 +3,7 @@ package myec2
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 	"sync"
@@ -56,7 +57,7 @@ func InstancesByRegion(instances []Instance) map[string][]Instance {
 	return instancesByRegion
 }
 
-func GetInstancesState() {
+func GetInstancesState() ([]Instance, error) {
 	instances, err := LoadInstancesFromYAML()
 	if err != nil {
 		panic(err)
@@ -65,41 +66,24 @@ func GetInstancesState() {
 	containerList := generateContainerSlice(instancesByRegion)
 
 	var wg sync.WaitGroup
-	containerChannel := make(chan Instance)
-	var dios []Instance
+	instanceChannel := make(chan Instance)
+	var instanceQueryResults []Instance
 
 	for _, container := range containerList {
 		wg.Add(1)
-		go CheckRegionInstanceState(container, containerChannel, &wg)
+		go CheckRegionInstanceState(container, instanceChannel, &wg)
 	}
 
 	go func() {
 		wg.Wait()
-		close(containerChannel)
+		close(instanceChannel)
 	}()
 
-	for v := range containerChannel {
-		dios = append(dios, v)
+	for v := range instanceChannel {
+		instanceQueryResults = append(instanceQueryResults, v)
 	}
 
-	file, err := os.Create("candleburn.json")
-	if err != nil {
-		panic(err)
-		// return fmt.Errorf("failed to create log file: %w", err)
-	}
-	defer file.Close()
-
-	jsonData, err := json.MarshalIndent(dios, "", "  ")
-	if err != nil {
-		panic(err)
-		// return fmt.Errorf("failed to marshal LaunchTemplateData to JSON: %w", err)
-	}
-
-	_, err = file.Write(jsonData)
-	if err != nil {
-		panic(err)
-		// return fmt.Errorf("failed to write request response to log file: %w", err)
-	}
+	return instanceQueryResults, nil
 }
 
 func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan Instance, wg *sync.WaitGroup) {
@@ -159,4 +143,24 @@ func generateContainerSlice(instancesByRegion map[string][]Instance) []RegionIns
 	}
 
 	return containers
+}
+
+func ExportInstancesQuery(query []Instance) error {
+	file, err := os.Create("candleburn.json")
+	if err != nil {
+		return fmt.Errorf("failed to create log file: %w", err)
+	}
+	defer file.Close()
+
+	jsonData, err := json.MarshalIndent(query, "", "  ")
+	if err != nil {
+		return fmt.Errorf("failed to marshal LaunchTemplateData to JSON: %w", err)
+	}
+
+	_, err = file.Write(jsonData)
+	if err != nil {
+		return fmt.Errorf("failed to write request response to log file: %w", err)
+	}
+
+	return nil
 }
