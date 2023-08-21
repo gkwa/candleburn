@@ -49,6 +49,53 @@ func CompareInstanceSlices(slice1, slice2 []Instance) bool {
 	return true
 }
 
+func TestLoadManyTimes(t *testing.T) {
+	expected := `
+	[
+		{
+		  "InstanceID": "i-west1aabbbccc",
+		  "Name": "myhost1",
+		  "Region": "us-west-1",
+		  "Running": false
+		},
+		{
+		  "InstanceID": "i-east1eeefffggg",
+		  "Name": "myhost2",
+		  "Region": "us-east-1",
+		  "Running": false
+		},
+		{
+		  "InstanceID": "i-east1hhhiiijjj",
+		  "Name": "myhost3",
+		  "Region": "us-east-1",
+		  "Running": false
+		}
+	]
+	`
+
+	for i := 0; i < 100; i++ {
+		got, err := LoadInstancesFromYAML()
+		if err != nil {
+			panic(err)
+		}
+
+		// Unmarshal the JSON string into a struct
+		var instanceList []Instance
+		err = json.Unmarshal([]byte(expected), &instanceList)
+		if err != nil {
+			t.Error(err)
+		}
+
+		want := instanceList
+
+		equal := CompareInstanceSlices(want, got)
+
+		if !equal {
+			t.Errorf("Expected %v but got %v", want, got)
+		}
+	}
+}
+
 func TestLoad(t *testing.T) {
 	expected := `
 	[
@@ -229,7 +276,7 @@ func TestContainerSlice(t *testing.T) {
 		}
 	]
 	`
-	
+
 	instances, err := LoadInstancesFromYAML()
 	if err != nil {
 		panic(err)
