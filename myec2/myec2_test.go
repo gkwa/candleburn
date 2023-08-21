@@ -73,7 +73,7 @@ func TestLoadManyTimes(t *testing.T) {
 	]
 	`
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
 		got, err := LoadInstancesFromYAML()
 		if err != nil {
 			panic(err)
