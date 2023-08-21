@@ -16,6 +16,19 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type Bar struct {
+	Logger logging.Logger
+}
+
+func (b *Bar) Something() {
+	b.Logger.Debug("starting something")
+}
+
+func DoSomething(logger logging.Logger) {
+	b := Bar{Logger: logger}
+	b.Something()
+}
+
 type RegionInstances struct {
 	InstanceList []Instance
 	InstanceIDs  []string
@@ -32,8 +45,14 @@ type Instance struct {
 
 func LoadInstancesFromYAML() ([]Instance, error) {
 	file, err := os.Open("hosts.yaml")
+
+	logger := logging.Logger{}
+
+	b := Bar{Logger: logger}
+	b.Something()
+
 	if err != nil {
-		logging.Logger.Error("failed to open hosts.yaml")
+		logger.Error("failed to open hosts.yaml")
 		return []Instance{}, err
 	}
 	defer file.Close()
@@ -41,7 +60,7 @@ func LoadInstancesFromYAML() ([]Instance, error) {
 	data := make(map[string][]Instance)
 	decoder := yaml.NewDecoder(file)
 	if err := decoder.Decode(&data); err != nil {
-		logging.Logger.Fatal(err.Error())
+		logger.Fatal(err.Error())
 	}
 
 	hosts := data["hosts"]
@@ -98,10 +117,15 @@ func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan I
 	}
 	client := ec2.NewFromConfig(cfg)
 
+	logger := logging.Logger{}
+
+	b := Bar{Logger: logger}
+	b.Something()
+
 	resp, err := client.DescribeInstances(context.TODO(), input)
 	if err != nil {
 		s := zap.String("instance_ids", strings.Join(ris.InstanceIDs, ","))
-		logging.Logger.Error("failed to describe instances", s, zap.Error(err))
+		logger.Error("failed to describe instances", s, zap.Error(err))
 		return
 	}
 
