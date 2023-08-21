@@ -29,11 +29,6 @@ type Instance struct {
 	Type       string
 }
 
-type RegionEc2Response struct {
-	DescribeInstanceOutput ec2.DescribeInstancesOutput
-	Region                 string
-}
-
 func LoadInstancesFromYAML() ([]Instance, error) {
 	file, err := os.Open("hosts.yaml")
 	if err != nil {
@@ -87,7 +82,7 @@ func GetInstancesState() {
 		dios = append(dios, v)
 	}
 
-	file, err := os.Create("candleburn1.json")
+	file, err := os.Create("candleburn.json")
 	if err != nil {
 		panic(err)
 		// return fmt.Errorf("failed to create log file: %w", err)

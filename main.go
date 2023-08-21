@@ -1,8 +1,6 @@
 package main
 
 import (
-	"flag"
-
 	"github.com/taylormonacelli/candleburn/logging"
 	"github.com/taylormonacelli/candleburn/myec2"
 )
@@ -13,6 +11,5 @@ func init() {
 }
 
 func main() {
-	flag.Parse()
 	myec2.GetInstancesState()
 }
