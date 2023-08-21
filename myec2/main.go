@@ -10,27 +10,27 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/taylormonacelli/candleburn/logging"
+	log "github.com/taylormonacelli/ivytoe"
 
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
 )
 
-var logger logging.Logger
+var logger log.Logger
 
 func init() {
-	logger = logging.Logger{}
+	logger = log.Logger{}
 }
 
 type Bar struct {
-	Logger logging.Logger
+	Logger log.Logger
 }
 
 func (b *Bar) Something() {
 	b.Logger.Debug("starting something")
 }
 
-func DoSomething(logger logging.Logger) {
+func DoSomething(logger log.Logger) {
 	b := Bar{Logger: logger}
 	b.Something()
 }
@@ -118,7 +118,7 @@ func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan I
 	}
 	client := ec2.NewFromConfig(cfg)
 
-	logger := logging.Logger{}
+	logger := log.Logger{}
 
 	b := Bar{Logger: logger}
 	b.Something()

@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.18.35
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.113.1
+	github.com/taylormonacelli/ivytoe v0.0.0-20230821172613-98204be105c1
 	go.uber.org/zap v1.25.0
 	gopkg.in/yaml.v2 v2.4.0
 )
