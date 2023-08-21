@@ -1,0 +1,16 @@
+hosts:
+- name: myhost1
+  access:
+  - support@domain.com
+  instance_id: i-west1aabbbccc
+  region: us-west-1
+- name: myhost2
+  access:
+  - support@domain.com
+  instance_id: i-east1eeefffggg
+  region: us-east-1
+- name: myhost3
+  access:
+  - support@domain.com
+  instance_id: i-east1hhhiiijjj
+  region: us-east-1
