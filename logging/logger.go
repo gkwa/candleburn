@@ -1,53 +1,33 @@
 package logging
 
 import (
+	"os"
+
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
-type Logger struct {
-	zap *zap.Logger
+var Logger *zap.Logger
+
+func Init() {
+	Logger, _ = GetLogger()
 }
 
-func Must(logger *Logger, err error) *Logger {
-	if err != nil {
-		panic(err)
-	}
-	return logger
+func GetLogger() (*zap.Logger, error) {
+	config := zap.NewProductionEncoderConfig()
+	config.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncodeTime = nil // Removing timestamp from logs
+	consoleEncoder := zapcore.NewConsoleEncoder(config)
+	defaultLogLevel := zapcore.DebugLevel
+	core := zapcore.NewTee(
+		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), defaultLogLevel),
+	)
+
+	logger := zap.New(core, zap.AddCaller())
+
+	return logger, nil
 }
 
-func NewLogger(logFile string) (*Logger, error) {
-	zap.NewProductionConfig()
-	config := zap.NewProductionConfig()
-	config.OutputPaths = []string{"stdout", "./logs/" + logFile}
-	logger, err := config.Build(zap.AddCaller())
-	if err != nil {
-		return nil, err
-	}
-	return &Logger{zap: logger}, err
-}
-
-func (l Logger) Debug(msg string, fields ...zap.Field) {
-	l.writer().Debug(msg, fields...)
-}
-
-func (l Logger) Info(msg string, fields ...zap.Field) {
-	l.writer().Info(msg, fields...)
-}
-
-func (l Logger) Error(msg string, fields ...zap.Field) {
-	l.writer().Error(msg, fields...)
-}
-
-func (l Logger) Fatal(msg string, fields ...zap.Field) {
-	l.writer().Error(msg, fields...)
-}
-
-
-var noOpLogger = zap.NewNop()
-
-func (l Logger) writer() *zap.Logger {
-	if l.zap == nil {
-		return noOpLogger
-	}
-	return l.zap
+func Sync() {
+	Logger.Sync()
 }
