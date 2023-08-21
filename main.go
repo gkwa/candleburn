@@ -28,7 +28,7 @@ func init() {
 
 func main() {
 	flag.BoolVar(&showVersion, "version", false, "Show the application version")
-	flag.StringVar(&outfile, "outfile", fmt.Sprintf("%s.json", processName), "Save query to this file")
+	flag.StringVar(&outfile, "outfile", fmt.Sprintf("%s.json", processName), "Save query to this file or - for stdout")
 
 	flag.Parse()
 
@@ -41,5 +41,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	myec2.ExportInstancesQuery(results)
+	myec2.ExportInstancesQuery(results, outfile)
 }

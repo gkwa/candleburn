@@ -146,19 +146,25 @@ func generateInstanceSlice(instancesByRegion map[string][]Instance) []RegionInst
 	return containers
 }
 
-func ExportInstancesQuery(query []Instance) error {
-	file, err := os.Create("candleburn.json")
-	if err != nil {
-		return fmt.Errorf("failed to create log file: %w", err)
+func ExportInstancesQuery(query []Instance, outfile string) error {
+	var writer *os.File
+	if outfile == "-" {
+		writer = os.Stdout
+	} else {
+		file, err := os.Create(outfile)
+		if err != nil {
+			return fmt.Errorf("failed to create log file: %w", err)
+		}
+		defer file.Close()
+		writer = file
 	}
-	defer file.Close()
 
 	jsonData, err := json.MarshalIndent(query, "", "  ")
 	if err != nil {
 		return fmt.Errorf("failed to marshal LaunchTemplateData to JSON: %w", err)
 	}
 
-	_, err = file.Write(jsonData)
+	_, err = writer.Write(jsonData)
 	if err != nil {
 		return fmt.Errorf("failed to write request response to log file: %w", err)
 	}
