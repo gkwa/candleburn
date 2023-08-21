@@ -25,6 +25,7 @@ jobs:
         go-version: "1.20"
     - name: Build & Test
       run: |
+        cp myec2/hosts.yaml .
         go build -v
         go test -v ./...
     - name: Run GoReleaser
