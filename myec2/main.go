@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 	"sync"
 
@@ -88,6 +89,10 @@ func GetInstancesState() ([]Instance, error) {
 	if err != nil {
 		return []Instance{}, fmt.Errorf("failed to load instances from yaml: %w", err)
 	}
+
+	sort.Slice(instances, func(i, j int) bool {
+		return instances[i].Name < instances[j].Name
+	})
 
 	var wg sync.WaitGroup
 	var instanceQueryResults []Instance
