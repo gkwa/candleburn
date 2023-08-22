@@ -172,6 +172,11 @@ func generateInstanceSlice(instancesByRegion map[string][]Instance) []RegionInst
 		for _, instance := range instances {
 			hostIds = append(hostIds, instance.InstanceID)
 		}
+
+		sort.Slice(hostIds, func(i, j int) bool {
+			return hostIds[i] < hostIds[j]
+		})
+
 		ri.InstanceList = instancesByRegion[region]
 		ri.InstanceIDs = hostIds
 		ri.Region = region
