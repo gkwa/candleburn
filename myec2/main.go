@@ -167,15 +167,15 @@ func generateInstanceSlice(instancesByRegion map[string][]Instance) []RegionInst
 
 	for region := range instancesByRegion {
 		var hostIds []string
-		var container RegionInstances
+		var ri RegionInstances
 		instances := instancesByRegion[region]
 		for _, instance := range instances {
 			hostIds = append(hostIds, instance.InstanceID)
 		}
-		container.InstanceList = instancesByRegion[region]
-		container.InstanceIDs = hostIds
-		container.Region = region
-		containers = append(containers, container)
+		ri.InstanceList = instancesByRegion[region]
+		ri.InstanceIDs = hostIds
+		ri.Region = region
+		containers = append(containers, ri)
 	}
 
 	return containers
