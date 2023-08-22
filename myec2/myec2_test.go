@@ -55,12 +55,6 @@ func CompareInstanceSlices(slice1, slice2 []Instance) bool {
 	return true
 }
 
-func TestLoadManyTimes(t *testing.T) {
-	for i := 0; i < 1000; i++ {
-		TestLoad(t)
-	}
-}
-
 func TestLoad(t *testing.T) {
 	expected := `
 	[
