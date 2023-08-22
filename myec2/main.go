@@ -90,10 +90,6 @@ func GetInstancesState() ([]Instance, error) {
 		return []Instance{}, fmt.Errorf("failed to load instances from yaml: %w", err)
 	}
 
-	sort.Slice(instances, func(i, j int) bool {
-		return instances[i].Name < instances[j].Name
-	})
-
 	var wg sync.WaitGroup
 	var instanceQueryResults []Instance
 	instChannel := make(chan Instance)
@@ -113,6 +109,9 @@ func GetInstancesState() ([]Instance, error) {
 
 	for inst := range instChannel {
 		instanceQueryResults = append(instanceQueryResults, inst)
+		sort.Slice(instanceQueryResults, func(i, j int) bool {
+			return instanceQueryResults[i].Name < instances[j].Name
+		})
 	}
 
 	return instanceQueryResults, nil
