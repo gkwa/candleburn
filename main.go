@@ -6,7 +6,12 @@ import (
 	"os"
 
 	"github.com/taylormonacelli/candleburn/myec2"
+	log "github.com/taylormonacelli/ivytoe"
 )
+
+func init() {
+	logger = log.Logger{}
+}
 
 var (
 	version     = "dev"
@@ -16,6 +21,7 @@ var (
 )
 
 var (
+	logger      log.Logger
 	showVersion bool
 	outfile     string
 )
@@ -33,6 +39,7 @@ func main() {
 
 	results, err := myec2.GetInstancesState()
 	if err != nil {
+		logger.Fatal(err.Error())
 		panic(err)
 	}
 	myec2.ExportInstancesQuery(results, outfile)
