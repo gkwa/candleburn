@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	logger = log.Logger{}
+	logger = *log.NewLogger("candleburn.log")
 }
 
 var (
@@ -40,7 +40,6 @@ func main() {
 	results, err := myec2.GetInstancesState()
 	if err != nil {
 		logger.Fatal(err.Error())
-		panic(err)
 	}
 	myec2.ExportInstancesQuery(results, outfile)
 }

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
@@ -51,6 +52,7 @@ type Instance struct {
 }
 
 func LoadInstancesFromYAML(filePath string) ([]Instance, error) {
+
 	err := checkFileExists(filePath)
 	if err != nil {
 		return []Instance{}, err
@@ -83,11 +85,11 @@ func instancesByRegion(instances []Instance) map[string][]Instance {
 }
 
 func GetInstancesState() ([]Instance, error) {
-	filePath := "hosts.yaml"
+	absPath, _ := filepath.Abs("hosts.yaml")
 
-	instances, err := LoadInstancesFromYAML(filePath)
+	instances, err := LoadInstancesFromYAML(absPath)
 	if err != nil {
-		return []Instance{}, fmt.Errorf("failed to load instances from yaml: %w", err)
+		return []Instance{}, fmt.Errorf("failed to load instances from yaml %s: %w", absPath, err)
 	}
 
 	var wg sync.WaitGroup
