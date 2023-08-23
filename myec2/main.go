@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
@@ -83,14 +82,7 @@ func instancesByRegion(instances []Instance) map[string][]Instance {
 	return instancesByRegion
 }
 
-func GetInstancesState() ([]Instance, error) {
-	absPath, _ := filepath.Abs("hosts.yaml")
-
-	instances, err := LoadInstancesFromYAML(absPath)
-	if err != nil {
-		return []Instance{}, fmt.Errorf("failed to load instances from yaml %s: %w", absPath, err)
-	}
-
+func GetInstancesState(instances []Instance) ([]Instance, error) {
 	var wg sync.WaitGroup
 	var instanceQueryResults []Instance
 	instChannel := make(chan Instance)
@@ -125,11 +117,6 @@ func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan I
 		panic(err)
 	}
 	client := ec2.NewFromConfig(cfg)
-
-	logger := log.Logger{}
-
-	b := Bar{Logger: logger}
-	b.Something()
 
 	resp, err := client.DescribeInstances(context.TODO(), input)
 	if err != nil {

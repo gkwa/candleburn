@@ -3,9 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/taylormonacelli/candleburn/myec2"
+	"github.com/taylormonacelli/candleburn/web"
 	log "github.com/taylormonacelli/ivytoe"
 )
 
@@ -23,11 +26,30 @@ var (
 var (
 	logger      log.Logger
 	showVersion bool
+	listen      bool
 	outfile     string
 )
 
+func dostuff(w http.ResponseWriter, r *http.Request) {
+	absPath, _ := filepath.Abs("hosts.yaml")
+
+	instances, err := myec2.LoadInstancesFromYAML(absPath)
+	if err != nil {
+		// msg := fmt.Errorf("failed to load instances from yaml %s: %w", absPath, err)
+		logger.Fatal(err.Error())
+		os.Exit(1)
+	}
+
+	results, err := myec2.GetInstancesState(instances)
+	if err != nil {
+		logger.Fatal(err.Error())
+	}
+	myec2.ExportInstancesQuery(results, outfile)
+}
+
 func main() {
 	flag.BoolVar(&showVersion, "version", false, "Show the application version")
+	flag.BoolVar(&listen, "listen", false, "Listen for incommming commands")
 	flag.StringVar(&outfile, "outfile", fmt.Sprintf("%s.json", processName), "Save query to this file or - for stdout")
 
 	flag.Parse()
@@ -37,9 +59,9 @@ func main() {
 		os.Exit(0)
 	}
 
-	results, err := myec2.GetInstancesState()
-	if err != nil {
-		logger.Fatal(err.Error())
+	if listen {
+		web.Run(dostuff)
+	} else {
+		dostuff(nil, nil)
 	}
-	myec2.ExportInstancesQuery(results, outfile)
 }
