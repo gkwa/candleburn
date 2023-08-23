@@ -52,7 +52,6 @@ type Instance struct {
 }
 
 func LoadInstancesFromYAML(filePath string) ([]Instance, error) {
-
 	err := checkFileExists(filePath)
 	if err != nil {
 		return []Instance{}, err
