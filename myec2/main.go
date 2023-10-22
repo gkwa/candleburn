@@ -92,7 +92,7 @@ func GetInstancesState(instances []Instance) ([]Instance, error) {
 func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan Instance, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	input := &ec2.DescribeInstancesInput{InstanceIds: ris.InstanceIDs}
+	input := &ec2.DescribeInstancesInput{}
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(ris.Region))
 	if err != nil {
