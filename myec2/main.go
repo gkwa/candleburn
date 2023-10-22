@@ -56,9 +56,11 @@ func LoadInstancesFromYAML(filePath string) ([]Instance, error) {
 
 func instancesByRegion(instances []Instance) map[string][]Instance {
 	instancesByRegion := make(map[string][]Instance)
+
 	for _, i := range instances {
 		instancesByRegion[i.Region] = append(instancesByRegion[i.Region], i)
 	}
+
 	return instancesByRegion
 }
 

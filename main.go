@@ -33,7 +33,6 @@ func dostuff(w http.ResponseWriter, r *http.Request) {
 
 	instances, err := myec2.LoadInstancesFromYAML(absPath)
 	if err != nil {
-		// msg := fmt.Errorf("failed to load instances from yaml %s: %w", absPath, err)
 		slog.Error("loading instances from yaml failed", "error", err)
 		os.Exit(1)
 	}
@@ -50,6 +49,7 @@ func main() {
 	flag.BoolVar(&showVersion, "version", false, "Show the application version")
 	flag.BoolVar(&listen, "listen", false, "Listen for incommming commands")
 	flag.StringVar(&outfile, "outfile", fmt.Sprintf("%s.json", processName), "Save query to this file or - for stdout")
+
 	flag.BoolVar(&verbose, "verbose", false, "Enable verbose output")
 	flag.BoolVar(&verbose, "v", false, "Enable verbose output (shorthand)")
 
