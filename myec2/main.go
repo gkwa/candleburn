@@ -4,37 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"os"
 	"sort"
-	"strings"
 	"sync"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	log "github.com/taylormonacelli/ivytoe"
 
-	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
 )
-
-var logger log.Logger
-
-func init() {
-	logger = log.Logger{}
-}
-
-type Bar struct {
-	Logger log.Logger
-}
-
-func (b *Bar) Something() {
-	b.Logger.Debug("starting something")
-}
-
-func DoSomething(logger log.Logger) {
-	b := Bar{Logger: logger}
-	b.Something()
-}
 
 type RegionInstances struct {
 	InstanceList []Instance
@@ -58,7 +37,7 @@ func LoadInstancesFromYAML(filePath string) ([]Instance, error) {
 
 	file, err := os.Open(filePath)
 	if err != nil {
-		logger.Error("failed to open " + filePath)
+		slog.Error("open file", "path", filePath, "error", err)
 		return []Instance{}, err
 	}
 	defer file.Close()
@@ -66,7 +45,8 @@ func LoadInstancesFromYAML(filePath string) ([]Instance, error) {
 	data := make(map[string][]Instance)
 	decoder := yaml.NewDecoder(file)
 	if err := decoder.Decode(&data); err != nil {
-		logger.Fatal(err.Error())
+		slog.Error("decoding failure", "error", err)
+		return []Instance{}, err
 	}
 
 	hosts := data["hosts"]
@@ -120,8 +100,7 @@ func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan I
 
 	resp, err := client.DescribeInstances(context.TODO(), input)
 	if err != nil {
-		s := zap.String("instance_ids", strings.Join(ris.InstanceIDs, ","))
-		logger.Error("failed to describe instances", s, zap.Error(err))
+		slog.Error("failed to describe instances", "instance_ids", ris.InstanceIDs, "error", err)
 		return
 	}
 
