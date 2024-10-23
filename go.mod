@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.28.0
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.184.0
 	github.com/taylormonacelli/ivytoe v0.0.0-20230822234206-55c4ac4f0b86
-	go.uber.org/zap v1.25.0
+	go.uber.org/zap v1.27.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
