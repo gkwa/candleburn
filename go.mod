@@ -8,7 +8,6 @@ require (
 	github.com/taylormonacelli/ivytoe v0.0.0-20241023183353-29061f61da3d
 	go.uber.org/zap v1.27.0
 	gopkg.in/yaml.v2 v2.4.0
-	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
