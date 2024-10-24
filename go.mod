@@ -1,13 +1,13 @@
 module github.com/taylormonacelli/candleburn
 
-go 1.21
+go 1.22
 
 toolchain go1.23.2
 
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.28.0
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.184.0
-	github.com/taylormonacelli/ivytoe v0.0.0-20230822234206-55c4ac4f0b86
+	github.com/taylormonacelli/ivytoe v0.0.0-20241023183353-29061f61da3d
 	go.uber.org/zap v1.27.0
 	gopkg.in/yaml.v2 v2.4.0
 )

@@ -68,6 +68,8 @@ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKsk=
 github.com/taylormonacelli/ivytoe v0.0.0-20230822234206-55c4ac4f0b86 h1:CBBShJvCE+6+InywFu8axDOj5kAkZAvtbmDhuE9x0bY=
 github.com/taylormonacelli/ivytoe v0.0.0-20230822234206-55c4ac4f0b86/go.mod h1:zUrRHo9WJ2h1h3rm2qBtGX33R+zeWK3CJ0/zqTpTVJ8=
+github.com/taylormonacelli/ivytoe v0.0.0-20241023183353-29061f61da3d h1:9KCMDZs9IzKpfV8f4/XFTK2UkiT5YeiNTGNrl4uUO3c=
+github.com/taylormonacelli/ivytoe v0.0.0-20241023183353-29061f61da3d/go.mod h1:UhncqJqMpQ0fnCCXzcFpDrkHeL82j/2a+VT/s0Im1dA=
 go.uber.org/goleak v1.2.0 h1:xqgm/S+aQvhWFTtR0XK3Jvg7z8kGV8P4X14IzwN3Eqk=
 go.uber.org/multierr v1.11.0 h1:blXXJkSxSSfBVBlC76pxqeO+LN3aDfLQo+309xJstO0=
 go.uber.org/multierr v1.11.0/go.mod h1:20+QtiLqy0Nd6FdQB9TLXag12DsQkrbs3htMFfDN80Y=
