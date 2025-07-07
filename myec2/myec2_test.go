@@ -207,20 +207,6 @@ func TestContainerSlice(t *testing.T) {
 		{
 		  "InstanceList": [
 			{
-			  "InstanceID": "i-west1aabbbccc",
-			  "Name": "myhost1",
-			  "Region": "us-west-1",
-			  "Running": false
-			}
-		  ],
-		  "InstanceIDs": [
-			"i-west1aabbbccc"
-		  ],
-		  "Region": "us-west-1"
-		},
-		{
-		  "InstanceList": [
-			{
 			  "InstanceID": "i-east1eeefffggg",
 			  "Name": "myhost2",
 			  "Region": "us-east-1",
@@ -238,6 +224,20 @@ func TestContainerSlice(t *testing.T) {
 			"i-east1hhhiiijjj"
 		  ],
 		  "Region": "us-east-1"
+		},
+		{
+		  "InstanceList": [
+			{
+			  "InstanceID": "i-west1aabbbccc",
+			  "Name": "myhost1",
+			  "Region": "us-west-1",
+			  "Running": false
+			}
+		  ],
+		  "InstanceIDs": [
+			"i-west1aabbbccc"
+		  ],
+		  "Region": "us-west-1"
 		}
 	]
 	`
