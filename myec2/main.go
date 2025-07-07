@@ -131,7 +131,15 @@ func CheckRegionInstanceState(ris RegionInstances, regionInstancesChannel chan I
 func generateInstanceSlice(instancesByRegion map[string][]Instance) []RegionInstances {
 	var containers []RegionInstances
 
+	// Get all regions and sort them for deterministic order
+	var regions []string
 	for region := range instancesByRegion {
+		regions = append(regions, region)
+	}
+	sort.Strings(regions)
+
+	// Process regions in sorted order
+	for _, region := range regions {
 		var hostIds []string
 		var ri RegionInstances
 		instances := instancesByRegion[region]
