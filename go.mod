@@ -6,7 +6,7 @@ toolchain go1.25.3
 
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.31.12
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.254.1
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.255.0
 	github.com/taylormonacelli/goldbug v0.0.6
 	gopkg.in/yaml.v3 v3.0.1
 )
