@@ -2,7 +2,7 @@ module github.com/taylormonacelli/candleburn
 
 go 1.23
 
-toolchain go1.26.0
+toolchain go1.26.1
 
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.10
